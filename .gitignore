@@ -1,0 +1,22 @@
+# Android / Gradle
+.gradle/
+build/
+*/build/
+
+# Local configuration
+local.properties
+*.iml
+
+# IDE
+.idea/
+.vscode/
+
+# Generated emoji SVG cache (we only commit VectorDrawable)
+*.svg
+
+# Node / npm
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
