@@ -1,0 +1,61 @@
+name: Update Twemoji
+
+on:
+  schedule:
+    - cron: '0 0 * * 4'  # Every Thursday 00:00 (UTC)
+  workflow_dispatch:
+
+jobs:
+  check_latest_tag:
+    runs-on: ubuntu-latest
+    outputs:
+      tag_remote: ${{ steps.check_tag_remote.outputs.tag }}
+      tag_local: ${{ steps.check_tag_local.outputs.tag }}
+    steps:
+      - name: Check remote
+        id: check_tag_remote
+        run: bash scripts/remote-tag.sh | xargs -I {} echo "tag={}" >> $GITHUB_OUTPUT
+
+      - name: Fetch version.txt
+        uses: actions/checkout@v5
+        with:
+          sparse-checkout: |
+            version.txt
+          sparse-checkout-cone-mode: false
+
+
+      - name: Check local
+        id: check_tag_local
+        run: cat version.txt | xargs -I {} echo "tag={}" >> $GITHUB_OUTPUT
+
+  update_if_need:
+    needs: check_latest_tag
+    if: needs.check_latest_tag.outputs.tag_remote != needs.check_latest_tag.outputs.tag_local
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          java-package: 'jre'
+
+      - name: Install vd-tool
+        run: bash scripts/install-vd-tool.sh
+
+      - name: Install twemoji sources
+        run: bash scripts/install-twemoji.sh
+
+      - name: Update twemoji
+        run: bash scripts/convert.sh
+
+      - name: Update tag local
+        run: echo ${{ needs.check_latest_tag.outputs.tag_remote }} > version.txt
+
+      - name: Commit changes
+        run: bash scripts/commit.sh ${{ needs.check_latest_tag.outputs.tag_remote }}
