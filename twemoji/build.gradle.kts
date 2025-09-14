@@ -7,7 +7,12 @@ android {
     namespace = "com.github.netsugo.twemoji"
     compileSdk = 36
     defaultConfig {
-        minSdk = 19
+        minSdk = 21
+
+        vectorDrawables {
+            useSupportLibrary = false
+            generatedDensities?.clear()
+        }
     }
 
     buildTypes {
@@ -19,6 +24,16 @@ android {
     publishing {
         singleVariant("release") {
             withSourcesJar()
+        }
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            afterEvaluate {
+                from(components["release"])
+            }
         }
     }
 }
