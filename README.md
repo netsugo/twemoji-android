@@ -45,12 +45,12 @@ fun Hello() {
 example with type alias:
 
 ```kotlin
-typealias Twemoji = com.github.netsugo.twemoji.R
+typealias Twemoji = com.github.netsugo.twemoji.R.drawable
 
 @Composable
 fun Hello() {
     Image(
-        painter = painterResouce(Twemoji.drawable.emoji_1f600),
+        painter = painterResouce(Twemoji.emoji_1f600),
         contentDescription = "grinning face"
     )
 }
