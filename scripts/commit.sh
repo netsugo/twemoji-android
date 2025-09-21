@@ -4,7 +4,7 @@ set -euo pipefail
 USERNAME="github-actions[bot]"
 EMAIL="41898282+github-actions[bot]@users.noreply.github.com"
 TAG_NAME=$1
-LIB_VERSION="0.1"
+LIB_VERSION="0.2"
 
 # commit
 git config --local user.name "${USERNAME}"
@@ -12,7 +12,7 @@ git config --local user.email "${EMAIL}"
 git add .
 git commit -m "Update Twemoji to ${TAG_NAME}"
 
-TAG=$(echo "${LIB_VERSION}-${TAG_NAME}" | sed -e 's/v//g')
+TAG=$(echo "${TAG_NAME}-${LIB_VERSION}" | sed -e 's/v//g')
 
 # push
 if [ $? -eq 0 ]; then

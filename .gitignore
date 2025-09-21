@@ -24,3 +24,7 @@ Thumbs.db
 # Temporary files
 vd-tool/
 tmp/
+
+# svg-to-compose
+s2c*
+.s2c

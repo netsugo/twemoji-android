@@ -15,3 +15,16 @@ PREFIX="emoji_"
 TARGET_DIR="./twemoji/src/main/res/drawable"
 mkdir -p "${TARGET_DIR}"
 for f in "${OUTPUT_DIR}"/*; do mv "$f" "${TARGET_DIR}/${PREFIX}$(basename "$f" | sed -e 's/-/_/g')"; done
+
+# convert svg -> Compose ImageVector
+OUTPUT_COMPOSE_DIR="./twemoji/src/main/kotlin/com/github/netsugo/twemoji"
+S2C_BINARY="s2c-linuxX64-binaries/s2c.kexe"
+chmod +x ./gradlew
+chmod +x "${S2C_BINARY}"
+"${S2C_BINARY}" \
+    --output "${OUTPUT_COMPOSE_DIR}" \
+    --package "com.github.netsugo.twemoji" \
+    --theme "" \
+    --optimize=false \
+    --no-preview \
+    "${TARGET_DIR}"
