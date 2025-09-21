@@ -27,4 +27,5 @@ chmod +x "${S2C_BINARY}"
     --theme "" \
     --optimize=false \
     --no-preview \
+    --silent \
     "${TARGET_DIR}"
